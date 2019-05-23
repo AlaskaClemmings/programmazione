@@ -1,11 +1,16 @@
 import("stdfaust.lib");
 
-maingroup(x) = hgroup ("[2] OSC IL LATORS", x);
+vmeter(x) = fadgroup(attach(x, envelop(x) : vbargraph("[99][unit:dB]", -70, +5)));
 
-osc1group(x) = maingroup(vgroup ("[2] f1", x));
-osc2group(x) = maingroup(vgroup ("[3] f2", x));
-osc3group(x) = maingroup(vgroup ("[4] f3", x));
-osc4group(x) = maingroup(vgroup ("[5] f4", x));
+envelop = abs : max ~ -(1.0/ma.SR) : max(ba.db2linear(-70)) : ba.linear2db;
+
+maingroup(x) = hgroup("[2] OSC IL LATORS", x);
+
+fadgroup (x) = maingroup(hgroup("[1]", x));
+osc1group(x) = fadgroup(hgroup ("[2] f1", x));
+osc2group(x) = fadgroup(hgroup ("[3] f2", x));
+osc3group(x) = fadgroup(hgroup ("[4] f3", x));
+osc4group(x) = fadgroup(hgroup ("[5] f4", x));
 
 frq = vslider("[1] f1 [style:knob] [unit:Hz]", 440,100,20000,1);
 
@@ -14,10 +19,10 @@ pan2 = osc2group(vslider("[1] p2 [style:knob]", 0.5,0,1,0.01));
 pan3 = osc3group(vslider("[1] p3 [style:knob]", 0.5,0,1,0.01));
 pan4 = osc4group(vslider("[1] p4 [style:knob]", 0.5,0,1,0.01));
 
-vol1 = osc1group(vslider("[2] vol1", 0.0,0,1,0.01));
-vol2 = osc2group(vslider("[2] vol2", 0.0,0,1,0.01));
-vol3 = osc3group(vslider("[2] vol3", 0.0,0,1,0.01));
-vol4 = osc4group(vslider("[2] vol4", 0.0,0,1,0.01));
+vol1 = osc1group(vslider("[1] vol1", 0.0,0,1,0.01) : vmeter);
+vol2 = osc2group(vslider("[1] vol2", 0.0,0,1,0.01) : vmeter);
+vol3 = osc3group(vslider("[1] vol3", 0.0,0,1,0.01) : vmeter);
+vol4 = osc4group(vslider("[1] vol4", 0.0,0,1,0.01) : vmeter);
 
 process = os.oscsin(frq*1), os.oscsin(frq*2),
           os.oscsin(frq*3), os.oscsin(frq*4):
@@ -28,3 +33,4 @@ process = os.oscsin(frq*1), os.oscsin(frq*2),
 	      _ * (sqrt(pan3)), _ * (sqrt(pan4)) : 
           _+_, _+_, _+_, _+_ : _+_, _+_ :
           _ *(0.25), _ *(0.25);
+
