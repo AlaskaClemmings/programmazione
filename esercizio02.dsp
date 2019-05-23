@@ -1,10 +1,13 @@
 import("stdfaust.lib");
 
-osc1group(x) = vgroup ("f1", x);
-osc2group (x) = vgroup ("f2", x);
-osc3group (x) = vgroup ("f3", x);
-osc4group (x) = vgroup ("f4", x);
-frq = vslider("f1 [style:knob] [unit:Hz]", 440,100,20000,1);
+maingroup(x) = hgroup ("[2] OSC IL LATORS", x);
+
+osc1group(x) = maingroup(vgroup ("[2] f1", x));
+osc2group(x) = maingroup(vgroup ("[3] f2", x));
+osc3group(x) = maingroup(vgroup ("[4] f3", x));
+osc4group(x) = maingroup(vgroup ("[5] f4", x));
+
+frq = vslider("[1] f1 [style:knob] [unit:Hz]", 440,100,20000,1);
 
 pan1 = osc1group(vslider("[1] p1 [style:knob]", 0.5,0,1,0.01));
 pan2 = osc2group(vslider("[1] p2 [style:knob]", 0.5,0,1,0.01));
@@ -25,4 +28,3 @@ process = os.oscsin(frq*1), os.oscsin(frq*2),
 	      _ * (sqrt(pan3)), _ * (sqrt(pan4)) : 
           _+_, _+_, _+_, _+_ : _+_, _+_ :
           _ *(0.25), _ *(0.25);
-
