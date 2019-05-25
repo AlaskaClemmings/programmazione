@@ -6,26 +6,26 @@ envelop = abs : max ~ -(1.0/ma.SR) : max(ba.db2linear(-70)) : ba.linear2db;
 
 maingroup(x) = hgroup("[02] OSCILLATORS", x);
  
-fad1group(x) = maingroup(hgroup("[01]", x));
-osc1group(x) = fad1group(vgroup("[01] f1", x));
-fad2group(x) = maingroup(hgroup("[02]", x));
-osc2group(x) = fad2group(vgroup("[01] f2", x));
-fad3group(x) = maingroup(hgroup("[03]", x));
-osc3group(x) = fad3group(vgroup("[01] f3", x));
-fad4group(x) = maingroup(hgroup("[04]", x));
-osc4group(x) = fad4group(vgroup("[01] f4", x));
+fad1group(x) = maingroup(hgroup("[01] f1", x));
+osc1group(x) = fad1group(vgroup("[01]", x));
+fad2group(x) = maingroup(hgroup("[02] f2", x));
+osc2group(x) = fad2group(vgroup("[01]", x));
+fad3group(x) = maingroup(hgroup("[03] f3", x));
+osc3group(x) = fad3group(vgroup("[01]", x));
+fad4group(x) = maingroup(hgroup("[04] f4", x));
+osc4group(x) = fad4group(vgroup("[01]", x));
 
 frq = vslider("[01] f1 [style:knob]", 440,100,20000,1); 
 
-pan1 = osc1group(vslider("[01] p1 [style:knob]", 0.5,0,1,0.01));
-pan2 = osc2group(vslider("[01] p2 [style:knob]", 0.5,0,1,0.01)); 
-pan3 = osc3group(vslider("[01] p3 [style:knob]", 0.5,0,1,0.01));
-pan4 = osc4group(vslider("[01] p4 [style:knob]", 0.5,0,1,0.01)); 
+pan1 = osc1group(vslider("[01] pan [style:knob]", 0,-90,90,0.1) + 90 / 180 : si.smoo);
+pan2 = osc2group(vslider("[01] pan [style:knob]", 0,-90,90,0.1) + 90 / 180 : si.smoo); 
+pan3 = osc3group(vslider("[01] pan [style:knob]", 0,-90,90,0.1) + 90 / 180 : si.smoo);
+pan4 = osc4group(vslider("[01] pan [style:knob]", 0,-90,90,0.1) + 90 / 180 : si.smoo);
 
-vol1 = osc1group(vslider("[02] vol1", 0.0,0,1,0.01));
-vol2 = osc2group(vslider("[02] vol2", 0.0,0,1,0.01));
-vol3 = osc3group(vslider("[02] vol3", 0.0,0,1,0.01));
-vol4 = osc4group(vslider("[02] vol4", 0.0,0,1,0.01)); 
+vol1 = osc1group(vslider("[02] vol1 [unit:dB]", 0,-96,0,1.0) : ba.db2linear : si.smoo);
+vol2 = osc2group(vslider("[02] vol2 [unit:dB]", 0,-96,0,1.0) : ba.db2linear : si.smoo);
+vol3 = osc3group(vslider("[02] vol3 [unit:dB]", 0,-96,0,1.0) : ba.db2linear : si.smoo);
+vol4 = osc4group(vslider("[02] vol4 [unit:dB]", 0,-96,0,1.0) : ba.db2linear : si.smoo); 
 
 process = os.oscsin(frq*1), os.oscsin(frq*2),
           os.oscsin(frq*3), os.oscsin(frq*4):
