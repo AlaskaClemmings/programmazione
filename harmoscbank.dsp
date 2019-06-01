@@ -9,7 +9,7 @@ oscill(o) = os.oscsin(frq*ooo) : hgroup("[02] OSC %ooo", * (vol) <: * (sqrt(1-pa
   with{
     ooo = o +(001);
     panfadg(x) = vgroup("[01]", x);
-    frq = vslider("[01] f1 [style:knob]", 440,100,20000,1 );
+    frq = vslider("[01] f1 [style:knob]", 440,100,20000,0.01) : si.smoo;
     pan = panfadg(vslider("[01] PAN [style:knob]", 0,-90,90,0.1) + 90 / 180 : si.smoo);
     vol = panfadg(vslider("[02] VOL [style:knob]", 0,0,1,0.1) : si.smoo);
 };
