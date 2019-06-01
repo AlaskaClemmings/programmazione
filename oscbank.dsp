@@ -8,7 +8,7 @@ vmeter(x) = attach(x, envelop(x) : vbargraph("[99][unit:dB]", -70, +5))
 oscill(o) = vgroup("[02] OSC %ooo", os.oscsin(frq) : * (vol) <: * (sqrt(1-pan)), * (sqrt(pan)))
   with{
     ooo = o +(001);
-    frq = vslider("[01] FRQ [style:knob]", 440,100,20000,1);
+    frq = vslider("[01] FRQ [style:knob]", 440,100,20000,0.01) : si.smoo;
     pan = vslider("[02] PAN [style:knob]", 0,-90,90,0.1) + 90 / 180 : si.smoo;
     vol = vslider("[03] VOL [style:knob]", 0,0,1,0.1) : si.smoo;
 };
