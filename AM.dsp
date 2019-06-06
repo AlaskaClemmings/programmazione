@@ -1,19 +1,15 @@
 import("stdfaust.lib");
 
-vmeter(x) = attach(x, envelop(x) : vbargraph("[99][unit:dB]", -70, +5))
+carrier = os.oscsin(frqc) : * (modulator)
   with{
-    envelop = abs : max ~ -(1.0/ma.SR) : max(ba.db2linear(-70)) : ba.linear2db; 
+    frqc = vslider("[01] C Freq [style:knob]", 440,100,20000,0.01) : si.smoo;
 };
 
-carrier = os.oscsin(frq) : * (modulator)
+modulator = os.oscsin(frqm) : * (volm) : + (offsetm)
   with{
-    frq = vslider("[01] FRQ [style:knob]", 440,100,20000,0.01) : si.smoo;
-};
-
-modulator = os.oscsin(frq) : * (vol)
-  with{
-    frq = vslider("[01] FRQ [style:knob]", 1,0.01,20000,0.01) : si.smoo;
-    vol = vslider("[03] VOL [style:knob]", 0,0,1,0.1) : si.smoo;
+    frqm = vslider("[01] M Freq [style:knob]", 1,0.01,20000,0.01) : si.smoo;
+    volm = vslider("[02] M Vol [style:knob]", 0,0,1,0.1) : si.smoo;
+    offsetm = vslider("[03] M Offset [style:knob]", 0,0,10,0.01) : si.smoo;
 };
 
 process = carrier;
